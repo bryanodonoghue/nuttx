@@ -43,6 +43,9 @@
 #define GB_CONTROL_TYPE_GET_MANIFEST            0x04
 #define GB_CONTROL_TYPE_CONNECTED               0x05
 #define GB_CONTROL_TYPE_DISCONNECTED            0x06
+#define GB_CONTROL_TYPE_TIMESYNC_ENABLE         0x07
+#define GB_CONTROL_TYPE_TIMESYNC_DISABLE        0x08
+#define GB_CONTROL_TYPE_TIMESYNC_AUTHORITATIVE  0x09
 #define GB_CONTROL_TYPE_INTERFACE_VERSION	0x0a
 
 /* version request has no payload */

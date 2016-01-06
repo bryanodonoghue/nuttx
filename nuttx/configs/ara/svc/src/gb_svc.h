@@ -32,27 +32,30 @@
 #include <nuttx/greybus/types.h>
 
 /* SVC IDs */
-#define GB_SVC_CPORT_ID                 0x00
-#define GB_SVC_DEVICE_ID                0x01
+#define GB_SVC_CPORT_ID                         0x00
+#define GB_SVC_DEVICE_ID                        0x01
 
 /* Version of the Greybus SVC protocol we support */
-#define GB_SVC_VERSION_MAJOR            0x00
-#define GB_SVC_VERSION_MINOR            0x01
+#define GB_SVC_VERSION_MAJOR                    0x00
+#define GB_SVC_VERSION_MINOR                    0x01
 
 /* Greybus SVC request types */
-#define GB_SVC_TYPE_INVALID             0x00
-#define GB_SVC_TYPE_PROTOCOL_VERSION    0x01
-#define GB_SVC_TYPE_HELLO               0x02
-#define GB_SVC_TYPE_INTF_DEVICE_ID      0x03
-#define GB_SVC_TYPE_INTF_HOTPLUG        0x04
-#define GB_SVC_TYPE_INTF_HOT_UNPLUG     0x05
-#define GB_SVC_TYPE_INTF_RESET          0x06
-#define GB_SVC_TYPE_CONN_CREATE         0x07
-#define GB_SVC_TYPE_CONN_DESTROY        0x08
-#define GB_SVC_TYPE_DME_PEER_GET        0x09
-#define GB_SVC_TYPE_DME_PEER_SET        0x0a
-#define GB_SVC_TYPE_ROUTE_CREATE        0x0b
-#define GB_SVC_TYPE_ROUTE_DESTROY       0x0c
+#define GB_SVC_TYPE_INVALID                     0x00
+#define GB_SVC_TYPE_PROTOCOL_VERSION            0x01
+#define GB_SVC_TYPE_HELLO                       0x02
+#define GB_SVC_TYPE_INTF_DEVICE_ID              0x03
+#define GB_SVC_TYPE_INTF_HOTPLUG                0x04
+#define GB_SVC_TYPE_INTF_HOT_UNPLUG             0x05
+#define GB_SVC_TYPE_INTF_RESET                  0x06
+#define GB_SVC_TYPE_CONN_CREATE                 0x07
+#define GB_SVC_TYPE_CONN_DESTROY                0x08
+#define GB_SVC_TYPE_DME_PEER_GET                0x09
+#define GB_SVC_TYPE_DME_PEER_SET                0x0a
+#define GB_SVC_TYPE_ROUTE_CREATE                0x0b
+#define GB_SVC_TYPE_ROUTE_DESTROY               0x0c
+#define GB_SVC_TYPE_TIMESYNC_ENABLE             0x0d
+#define GB_SVC_TYPE_TIMESYNC_DISABLE            0x0e
+#define GB_SVC_TYPE_TIMESYNC_AUTHORITATIVE      0x0f
 
 struct gb_svc_protocol_version_request {
 	__u8	major;
