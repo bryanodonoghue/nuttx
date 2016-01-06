@@ -30,6 +30,7 @@
 #define _GB_SVC_H_
 
 #include <nuttx/greybus/types.h>
+#include <nuttx/greybus/greybus.h>
 
 /* SVC IDs */
 #define GB_SVC_CPORT_ID                         0x00
@@ -150,6 +151,21 @@ struct gb_svc_dme_peer_set_request {
 
 struct gb_svc_dme_peer_set_response {
     __le16 result_code;
+} __packed;
+
+struct gb_svc_timesync_enable_request {
+    __u8    count;
+    __le64  frame_time;
+    __le32  strobe_delay;
+    __le32  strobe_mask;
+    __le32  refclk;
+} __packed;
+
+/* timesync enable response has no payload */
+/* timesync authoritative request has no payload */
+
+struct gb_svc_timesync_authoritative_response {
+     __le64 frame_time[GB_TIMESYNC_MAX_STROBES];
 } __packed;
 
 int gb_svc_protocol_version(void);
