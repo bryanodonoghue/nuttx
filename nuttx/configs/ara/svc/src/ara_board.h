@@ -111,6 +111,8 @@ struct ara_board_info {
     size_t nr_io_expanders;
 };
 
+void board_timesync_strobe(uint32_t strobe_mask);
+
 struct ara_board_info *board_init(void);
 void board_exit(void);
 

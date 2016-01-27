@@ -493,6 +493,8 @@ static struct ara_board_info bdb2a_board_info = {
     .nr_io_expanders = ARRAY_SIZE(bdb2a_io_expanders),
 };
 
+void board_timesync_strobe(uint32_t strobe_mask){};
+
 struct ara_board_info *board_init(void)
 {
     int i;

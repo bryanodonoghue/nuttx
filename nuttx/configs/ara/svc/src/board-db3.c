@@ -381,6 +381,11 @@ static struct ara_board_info db3_board_info = {
     .nr_io_expanders = ARRAY_SIZE(db3_io_expanders),
 };
 
+void board_timesync_strobe(uint32_t strobe_mask) {
+    stm32_gpiowrite(WD8B_DET_OUT, true);
+    stm32_gpiowrite(WD8B_DET_OUT, false);
+}
+
 struct ara_board_info *board_init(void) {
     int i;
 
