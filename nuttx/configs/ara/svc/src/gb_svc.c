@@ -38,10 +38,12 @@
 
 #include <arch/byteorder.h>
 
+#include "ara_board.h"
 #include "svc.h"
 #include <ara_debug.h>
 #include "tsb_switch.h"
 #include "gb_svc.h"
+#include "timesync.h"
 
 /*
  * FIXME: use the hardcoded endo id used in the kernel for now
@@ -300,6 +302,50 @@ static uint8_t gb_svc_route_destroy(struct gb_operation *op) {
     return gb_errno_to_op_result(rc);
 }
 
+static uint8_t gb_svc_timesync_enable(struct gb_operation *op) {
+    struct gb_svc_timesync_enable_request *req;
+    int rc;
+    uint8_t count;
+    uint64_t frame_time;
+    uint32_t strobe_delay;
+    uint32_t strobe_mask;
+    uint32_t refclk;
+
+    if (gb_operation_get_request_payload_size(op) < sizeof(*req)) {
+        gb_error("dropping short message\n");
+        return GB_OP_INVALID;
+    }
+
+    req = gb_operation_get_request_payload(op);
+    count = req->count;
+    frame_time = le64_to_cpu(req->frame_time);
+    strobe_delay = le32_to_cpu(req->strobe_delay);
+    strobe_mask = le32_to_cpu(req->strobe_mask);
+    refclk = le32_to_cpu(req->refclk);
+
+    rc = svc_timesync_enable(count, frame_time, strobe_delay, strobe_mask, refclk);
+    return gb_errno_to_op_result(rc);
+}
+
+static uint8_t gb_svc_timesync_disable(struct gb_operation *op) {
+printf("%s \n", __func__);
+    return gb_errno_to_op_result(svc_timesync_disable());
+}
+
+static uint8_t gb_svc_timesync_authoritative(struct gb_operation *op) {
+    struct gb_svc_timesync_authoritative_response *resp;
+    int rc;
+
+    resp = gb_operation_alloc_response(op, sizeof(*resp));
+    if (!resp) {
+        return GB_OP_NO_MEMORY;
+    }
+
+    rc = svc_timesync_authoritative((uint64_t*)&resp->frame_time);
+printf("%s return %d \n", __func__, rc);
+    return gb_errno_to_op_result(rc);
+}
+
 static struct gb_operation_handler gb_svc_handlers[] = {
     GB_HANDLER(GB_SVC_TYPE_INTF_DEVICE_ID, gb_svc_intf_device_id),
     GB_HANDLER(GB_SVC_TYPE_CONN_CREATE, gb_svc_connection_create),
@@ -308,6 +354,9 @@ static struct gb_operation_handler gb_svc_handlers[] = {
     GB_HANDLER(GB_SVC_TYPE_ROUTE_DESTROY, gb_svc_route_destroy),
     GB_HANDLER(GB_SVC_TYPE_DME_PEER_GET, gb_svc_dme_peer_get),
     GB_HANDLER(GB_SVC_TYPE_DME_PEER_SET, gb_svc_dme_peer_set),
+    GB_HANDLER(GB_SVC_TYPE_TIMESYNC_ENABLE, gb_svc_timesync_enable),
+    GB_HANDLER(GB_SVC_TYPE_TIMESYNC_DISABLE, gb_svc_timesync_disable),
+    GB_HANDLER(GB_SVC_TYPE_TIMESYNC_AUTHORITATIVE, gb_svc_timesync_authoritative)
 };
 
 struct gb_driver svc_driver = {

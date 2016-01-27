@@ -758,6 +758,72 @@ void stm32_gpiowrite(uint32_t pinset, bool value)
 }
 
 /****************************************************************************
+ * Name: stm32_gpiowrite_mask
+ *
+ * Description:
+ *   Write one or zero to the selected GPIO pins
+ *
+ ****************************************************************************/
+
+void stm32_gpiowrite_mask(uint32_t pinset, bool value)
+{
+  uint32_t base;
+#if defined(CONFIG_STM32_STM32F10XX)
+  uint32_t offset;
+#elif defined(CONFIG_STM32_STM32L15XX) || defined(CONFIG_STM32_STM32F20XX) || \
+      defined(CONFIG_STM32_STM32F30XX) || defined(CONFIG_STM32_STM32F40XX)
+  uint32_t bit;
+#endif
+  unsigned int port;
+  unsigned int pin;
+
+  port = (pinset & GPIO_PORT_MASK) >> GPIO_PORT_SHIFT;
+  if (port < STM32_NGPIO_PORTS)
+    {
+      /* Get the port base address */
+
+      base = g_gpiobase[port];
+
+      /* Get the pin number  */
+
+      pin = (pinset & GPIO_PIN_MASK) >> GPIO_PIN_SHIFT;
+
+      /* Set or clear the output on the pin */
+
+#if defined(CONFIG_STM32_STM32F10XX)
+
+      if (value)
+        {
+          offset = STM32_GPIO_BSRR_OFFSET;
+        }
+      else
+        {
+          offset = STM32_GPIO_BRR_OFFSET;
+        }
+
+      putreg32((1 << pin), base + offset);
+
+#elif defined(CONFIG_STM32_STM32L15XX) || defined(CONFIG_STM32_STM32F20XX) || \
+      defined(CONFIG_STM32_STM32F30XX) || defined(CONFIG_STM32_STM32F40XX)
+
+      if (value)
+        {
+          bit = GPIO_BSRR_SET(pin);
+        }
+      else
+        {
+          bit = GPIO_BSRR_RESET(pin);
+        }
+
+      putreg32(bit, base + STM32_GPIO_BSRR_OFFSET);
+
+#else
+# error "Unsupported STM32 chip"
+#endif
+    }
+}
+
+/****************************************************************************
  * Name: stm32_gpioread
  *
  * Description:

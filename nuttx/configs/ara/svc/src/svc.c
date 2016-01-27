@@ -50,6 +50,7 @@
 #include "svc.h"
 #include "vreg.h"
 #include "gb_svc.h"
+#include "timesync.h"
 
 #define SVCD_PRIORITY      (60)
 #define SVCD_STACK_SIZE    (2048)
@@ -857,6 +858,10 @@ int svc_init(int argc, char **argv) {
     svcd_set_state(SVC_STATE_STOPPED);
 
     rc = svcd_start();
+    if (rc) {
+        return rc;
+    }
+    rc = svc_timesync_init();
     if (rc) {
         return rc;
     }
