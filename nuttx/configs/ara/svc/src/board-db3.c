@@ -94,7 +94,7 @@
 #define WD_5_DET_IN     (GPIO_INPUT | GPIO_FLOAT | GPIO_PORTA | GPIO_PIN6)
 #define WD_6_DET_IN     (GPIO_INPUT | GPIO_FLOAT | GPIO_PORTA | GPIO_PIN7)
 #define WD8A_DET_IN     (GPIO_INPUT | GPIO_FLOAT | GPIO_PORTA | GPIO_PIN11)
-#define WD8B_DET_IN     (GPIO_INPUT | GPIO_FLOAT | GPIO_PORTA | GPIO_PIN12)
+#define WD8B_DET_OUT    (GPIO_OUTPUT | GPIO_PULLDOWN | GPIO_PORTA | GPIO_PIN12)
 
 /*
  * MOD_ACT_SW lines connected to SVC.
@@ -174,7 +174,7 @@ static struct vreg_data module_5_vreg_data[] = {
 DECLARE_MODULE_PORT_INTERFACE(apb1, apb1_vreg_data, 3,
                               WD8A_DET_IN, ARA_IFACE_WD_ACTIVE_HIGH);
 DECLARE_MODULE_PORT_INTERFACE(apb2, apb2_vreg_data, 1,
-                              WD8B_DET_IN, ARA_IFACE_WD_ACTIVE_HIGH);
+                              0, ARA_IFACE_WD_ACTIVE_HIGH);
 DECLARE_MODULE_PORT_INTERFACE(module_1, module_1_vreg_data, 13,
                               WD_1_DET_IN, ARA_IFACE_WD_ACTIVE_LOW);
 DECLARE_MODULE_PORT_INTERFACE(module_2, module_2_vreg_data, 11,
@@ -465,7 +465,7 @@ struct ara_board_info *board_init(void) {
     stm32_configgpio(WD_5_DET_IN);
     stm32_configgpio(WD_6_DET_IN);
     stm32_configgpio(WD8A_DET_IN);
-    stm32_configgpio(WD8B_DET_IN);
+    stm32_configgpio(WD8B_DET_OUT);
 
     /*
      * Configure the MOD_ACT_SW pins.
